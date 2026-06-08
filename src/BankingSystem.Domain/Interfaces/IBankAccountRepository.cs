@@ -1,6 +1,6 @@
 using BankingSystem.Domain.Entities;
 
-namespace BankingSystem.Domain.Repositories;
+namespace BankingSystem.Domain.Interfaces;
 
 public interface IBankAccountRepository
 {
