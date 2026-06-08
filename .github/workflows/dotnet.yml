@@ -5,6 +5,9 @@ push:
 branches:
 - main
 - develop
+- lab35
+- lab36
+- lab37
 
 pull_request:
 branches:
