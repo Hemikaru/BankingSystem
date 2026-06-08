@@ -1,38 +1,183 @@
 ﻿using BankingSystem.Application.DTOs;
+using BankingSystem.Application.Factories;
 using BankingSystem.Application.Services;
+using BankingSystem.Domain.Enums;
 using BankingSystem.Infrastructure.Repositories;
+using BankingSystem.Infrastructure.Persistence;
 
 var repository = new InMemoryBankAccountRepository();
-var service = new AccountService(repository);
 
-try
+var accountFactory = new AccountFactory();
+
+var accountService = new AccountService(
+    repository,
+    accountFactory);
+
+var queryService = new QueryService(
+    repository);
+
+var dataStore =
+    new JsonAccountDataStore(
+        "accounts.json");
+
+var persistenceService =
+    new AccountPersistenceService(
+        repository,
+        dataStore,
+        accountFactory);
+
+while (true)
 {
+    Console.WriteLine();
     Console.WriteLine("=== Banking System ===");
+    Console.WriteLine("1. Create account");
+    Console.WriteLine("2. Deposit");
+    Console.WriteLine("3. Withdraw");
+    Console.WriteLine("4. Transfer");
+    Console.WriteLine("5. Show total balance");
+    Console.WriteLine("6. Show richest account");
+    Console.WriteLine("7. Save accounts");
+    Console.WriteLine("8. Load accounts");
+    Console.WriteLine("0. Exit");
 
-    Console.Write("Enter account number: ");
+    Console.Write("Choose option: ");
+
+    var option = Console.ReadLine();
+
+    try
+    {
+        switch (option)
+        {
+            case "1":
+                CreateAccount();
+                break;
+
+            case "2":
+                Deposit();
+                break;
+
+            case "3":
+                Withdraw();
+                break;
+
+            case "4":
+                Transfer();
+                break;
+
+            case "5":
+                ShowTotalBalance();
+                break;
+
+            case "6":
+                ShowRichestAccount();
+                break;
+
+            case "7":
+                await persistenceService.SaveAsync();
+                Console.WriteLine("Saved.");
+                break;
+
+            case "8":
+                await persistenceService.LoadAsync();
+                Console.WriteLine("Loaded.");
+                break;
+
+            case "0":
+                return;
+
+            default:
+                Console.WriteLine("Unknown option.");
+                break;
+        }
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Error: {ex.Message}");
+    }
+}
+
+void CreateAccount()
+{
+    Console.Write("Account number: ");
     var accountNumber = Console.ReadLine()!;
 
-    var account = service.CreateAccount(
-        new CreateAccountRequest(accountNumber));
+    Console.Write("Type (1 - Checking, 2 - Savings): ");
 
-    Console.WriteLine();
-    Console.WriteLine("Account created successfully.");
-    Console.WriteLine($"Id: {account.Id}");
-    Console.WriteLine($"Account Number: {account.AccountNumber}");
+    var type = Console.ReadLine() == "2"
+        ? AccountType.Savings
+        : AccountType.Checking;
 
-    Console.WriteLine();
+    var account =
+        accountService.CreateAccount(
+            new CreateAccountRequest(
+                accountNumber,
+                type));
 
-    Console.Write("Deposit amount: ");
+    Console.WriteLine($"Created account {account.Id}");
+}
+
+void Deposit()
+{
+    Console.Write("Account id: ");
+    var accountId = Guid.Parse(Console.ReadLine()!);
+
+    Console.Write("Amount: ");
     var amount = decimal.Parse(Console.ReadLine()!);
 
-    service.Deposit(account.Id, amount);
+    accountService.Deposit(accountId, amount);
 
-    var balance = service.GetBalance(account.Id);
-
-    Console.WriteLine();
-    Console.WriteLine($"Current balance: {balance}");
+    Console.WriteLine("Deposit successful.");
 }
-catch (Exception ex)
+
+void Withdraw()
 {
-    Console.WriteLine($"Error: {ex.Message}");
+    Console.Write("Account id: ");
+    var accountId = Guid.Parse(Console.ReadLine()!);
+
+    Console.Write("Amount: ");
+    var amount = decimal.Parse(Console.ReadLine()!);
+
+    accountService.Withdraw(accountId, amount);
+
+    Console.WriteLine("Withdraw successful.");
+}
+
+void Transfer()
+{
+    Console.Write("From account id: ");
+    var fromId = Guid.Parse(Console.ReadLine()!);
+
+    Console.Write("To account id: ");
+    var toId = Guid.Parse(Console.ReadLine()!);
+
+    Console.Write("Amount: ");
+    var amount = decimal.Parse(Console.ReadLine()!);
+
+    accountService.Transfer(
+        fromId,
+        toId,
+        amount);
+
+    Console.WriteLine("Transfer successful.");
+}
+
+void ShowTotalBalance()
+{
+    Console.WriteLine(
+        $"Total balance: {queryService.GetTotalBalance()}");
+}
+
+void ShowRichestAccount()
+{
+    var account =
+        queryService.GetRichestAccount();
+
+    if (account is null)
+    {
+        Console.WriteLine("No accounts found.");
+        return;
+    }
+
+    Console.WriteLine(
+        $"Richest account: {account.AccountNumber} | Balance: {account.Balance}");
 }

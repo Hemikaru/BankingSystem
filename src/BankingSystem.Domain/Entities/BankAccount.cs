@@ -35,4 +35,31 @@ public abstract class BankAccount
                 amount,
                 TransactionType.Deposit));
     }
+
+    public virtual void Withdraw(decimal amount)
+    {
+        if (amount <= 0)
+            throw new ArgumentException(
+                "Amount must be greater than zero.");
+
+        if (Balance < amount)
+            throw new InvalidOperationException(
+                "Insufficient funds.");
+
+        Balance -= amount;
+
+        _transactions.Add(
+            new Transaction(
+                amount,
+                TransactionType.Withdrawal));
+    }
+
+    public void RestoreBalance(decimal balance)
+    {
+        if (balance < 0)
+            throw new ArgumentException(
+                "Balance cannot be negative.");
+
+        Balance = balance;
+    }
 }
