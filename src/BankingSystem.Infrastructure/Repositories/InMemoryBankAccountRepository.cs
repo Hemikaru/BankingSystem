@@ -17,12 +17,17 @@ public class InMemoryBankAccountRepository : IBankAccountRepository
         return _accounts.GetValueOrDefault(id);
     }
 
-    public IEnumerable<BankAccount> GetAll()
+    public IReadOnlyCollection<BankAccount> GetAll()
     {
         return _accounts.Values;
     }
 
     public void Update(BankAccount account)
     {
+    }
+
+    public void Clear()
+    {
+        _accounts.Clear();
     }
 }

@@ -1,7 +1,6 @@
 using System.Text.Json;
 using BankingSystem.Domain.Interfaces;
-using BankingSystem.Infrastructure.Persistence.Models;
-
+using BankingSystem.Application.DTOs;
 namespace BankingSystem.Infrastructure.Persistence;
 
 public class JsonAccountDataStore

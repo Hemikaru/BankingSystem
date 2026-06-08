@@ -53,4 +53,13 @@ public abstract class BankAccount
                 amount,
                 TransactionType.Withdrawal));
     }
+
+    public void RestoreBalance(decimal balance)
+    {
+        if (balance < 0)
+            throw new ArgumentException(
+                "Balance cannot be negative.");
+
+        Balance = balance;
+    }
 }

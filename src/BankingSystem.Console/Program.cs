@@ -3,6 +3,7 @@ using BankingSystem.Application.Factories;
 using BankingSystem.Application.Services;
 using BankingSystem.Domain.Enums;
 using BankingSystem.Infrastructure.Repositories;
+using BankingSystem.Infrastructure.Persistence;
 
 var repository = new InMemoryBankAccountRepository();
 
@@ -15,6 +16,16 @@ var accountService = new AccountService(
 var queryService = new QueryService(
     repository);
 
+var dataStore =
+    new JsonAccountDataStore(
+        "accounts.json");
+
+var persistenceService =
+    new AccountPersistenceService(
+        repository,
+        dataStore,
+        accountFactory);
+
 while (true)
 {
     Console.WriteLine();
@@ -25,6 +36,8 @@ while (true)
     Console.WriteLine("4. Transfer");
     Console.WriteLine("5. Show total balance");
     Console.WriteLine("6. Show richest account");
+    Console.WriteLine("7. Save accounts");
+    Console.WriteLine("8. Load accounts");
     Console.WriteLine("0. Exit");
 
     Console.Write("Choose option: ");
@@ -57,6 +70,16 @@ while (true)
 
             case "6":
                 ShowRichestAccount();
+                break;
+
+            case "7":
+                await persistenceService.SaveAsync();
+                Console.WriteLine("Saved.");
+                break;
+
+            case "8":
+                await persistenceService.LoadAsync();
+                Console.WriteLine("Loaded.");
                 break;
 
             case "0":

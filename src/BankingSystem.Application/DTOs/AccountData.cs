@@ -1,4 +1,4 @@
-namespace BankingSystem.Infrastructure.Persistence.Models;
+namespace BankingSystem.Application.DTOs;
 
 public class AccountData
 {

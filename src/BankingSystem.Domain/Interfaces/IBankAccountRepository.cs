@@ -8,7 +8,9 @@ public interface IBankAccountRepository
 
     BankAccount? GetById(Guid id);
 
-    IEnumerable<BankAccount> GetAll();
+    IReadOnlyCollection<BankAccount> GetAll();
 
     void Update(BankAccount account);
+    
+    void Clear();
 }
