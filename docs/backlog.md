@@ -1,22 +1,17 @@
 # Product Backlog
 
-## Iteration 1 (Lab 34) - Baseline
+## Iteration 1 (Lab 34) - Baseline ✅
 
-### High Priority
+### Реалізовано
 
-- Створення доменної моделі
-- Створення клієнта
 - Створення рахунку
 - Поповнення рахунку
 - Перегляд балансу
-- In-Memory репозиторій
-- Базові юніт-тести
-- CI pipeline
-
-### Medium Priority
-
-- UML діаграми
-- README
+- Доменна модель
+- In-Memory Repository
+- Unit Tests
+- CI Pipeline
+- UML Documentation
 
 ---
 
@@ -24,17 +19,35 @@
 
 ### High Priority
 
-- Збереження даних у JSON файл
-- Завантаження даних із файлу
+- Зняття коштів з рахунку
 - Переказ між рахунками
-- Історія транзакцій
+- JSON Persistence
+- Відновлення стану з файлу
+- Factory Pattern
 - LINQ-запити
+- Розширене консольне меню
 
-### Medium Priority
+### Business Rules
 
-- Пошук рахунків за клієнтом
-- Сортування рахунків
-- Розширення тестів
+- Неможливо поповнити рахунок на суму ≤ 0
+- Неможливо зняти суму ≤ 0
+- Неможливо зняти більше коштів, ніж є на балансі
+- Неможливо переказати кошти самому собі
+- Неможливо переказати суму ≤ 0
+
+### Queries & Analytics
+
+- Пошук рахунку за номером
+- Сортування рахунків за балансом
+- Отримання рахунків із позитивним балансом
+- Розрахунок загальної суми коштів у системі
+
+### Persistence
+
+- SaveAsync()
+- LoadAsync()
+- Обробка пошкодженого JSON
+- Обробка відсутнього файлу
 
 ---
 
@@ -42,17 +55,18 @@
 
 ### High Priority
 
-- Unit tests
-- Integration tests
-- Negative scenarios
-- Coverage report
-- Fault handling
+- Integration Tests
+- Coverage Report
+- Fault Handling
+- Quality Gate
+- Test Strategy
+- Test Matrix
 
 ### Medium Priority
 
-- Test Matrix
-- Test Strategy
-- Quality Gate у CI
+- Тестування файлового сховища
+- Тестування бізнес-правил
+- Негативні сценарії
 
 ---
 
@@ -62,12 +76,19 @@
 
 - USER_GUIDE
 - DEVELOPER_GUIDE
+- CHANGELOG
 - DEMO
 - FINAL_REPORT
-- CHANGELOG
 
 ### Medium Priority
 
 - Рефакторинг
-- Оптимізація документації
-- Підготовка захисту
+- Release Preparation
+- Documentation Review
+
+### Possible Extensions
+
+- BusinessAccount
+- XML Export
+- Observer Notifications
+- Transaction Analytics
