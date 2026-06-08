@@ -32,6 +32,14 @@ dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
 
 ---
 
+## Coverage Report
+
+Generate coverage:
+
+```bash
+dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
+```
+
 ## Unit Tests
 
 Перевіряють:
