@@ -1,5 +1,8 @@
+using BankingSystem.Domain.Enums;
+
 namespace BankingSystem.Application.DTOs;
 
 public record CreateAccountRequest(
-    string AccountNumber
+    string AccountNumber,
+    AccountType AccountType
 );
